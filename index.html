@@ -4,15 +4,224 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lovely People | Discord Bot</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS VARIABLES & THEME --- */
+        :root {
+            --pink: #ffbcd9;
+            --dark-pink: #d81b60;
+            --cotton-candy: linear-gradient(135deg, #ffbcd9 0%, #fce4ec 100%);
+            --white: #ffffff;
+            --text: #5f4b5e;
+        }
+
+        /* --- GLOBAL STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+            background-color: var(--white);
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* --- LOADING SCREEN --- */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #loader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--pink);
+            border-top: 5px solid var(--dark-pink);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #loader p {
+            color: var(--dark-pink);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--dark-pink);
+        }
+
+        .logo-area img {
+            height: 45px;
+            border-radius: 50%;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--dark-pink);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 90vh;
+            background: var(--cotton-candy);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .main-logo {
+            width: 180px;
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(216, 27, 96, 0.2);
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            color: var(--dark-pink);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .btn {
+            background: var(--white);
+            padding: 15px 35px;
+            border-radius: 30px;
+            text-decoration: none;
+            color: var(--dark-pink);
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        /* --- REQUEST SECTION --- */
+        .request-section {
+            padding: 80px 10%;
+            text-align: center;
+            background: var(--white);
+        }
+
+        .request-section h2 {
+            font-size: 2.5rem;
+            color: var(--dark-pink);
+            margin-bottom: 15px;
+        }
+
+        .form-container {
+            margin-top: 40px;
+            border: 8px solid var(--pink);
+            border-radius: 20px;
+            overflow: hidden;
+            background: #fdfdfd;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        iframe {
+            display: block;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 50px;
+            text-align: center;
+            background: #fffafa;
+            border-top: 1px solid var(--pink);
+        }
+
+        footer p {
+            font-size: 0.9rem;
+            color: #b0a0b0;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            nav ul { display: none; } /* Simplified for mobile */
+        }
+    </style>
 </head>
 <body>
 
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Lovely People are loading...</p>
+    </div>
+
     <nav>
         <div class="logo-area">
-            <img src="https://raw.githubusercontent.com/FemTubey/Lovely-People/refs/heads/main/logo.png" alt="Logo">
+            <img src="https://raw.githubusercontent.com/FemTubey/Lovely-People/refs/heads/main/logo.png" alt="Lovely People Logo">
             <span>Lovely People</span>
         </div>
         <ul>
@@ -24,21 +233,50 @@
     <section id="home" class="hero">
         <img src="https://raw.githubusercontent.com/FemTubey/Lovely-People/refs/heads/main/logo.png" alt="Lovely People Logo" class="main-logo">
         <h1>Lovely People</h1>
-        <p>A curated Discord experience for a better community.</p>
+        <p>The exclusive Discord bot designed for curated communities. Join the elite, stay for the vibe.</p>
         <a href="#request" class="btn">Apply for Access</a>
     </section>
 
     <section id="request" class="request-section">
         <h2>Request Permission</h2>
-        <p>To ensure a safe and positive environment, Lovely People requires manual approval.</p>
+        <p>Access is currently limited. Please fill out the form below to be considered for the whitelist.</p>
         <div class="form-container">
             <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScyv7_R-7F-V8D_u_O7y_uC8-fW7_Bv9I-9Fv_q_Z_V_L_v_A/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 Lovely People. All rights reserved.</p>
+        <p>&copy; 2026 Lovely People. Crafted with love.</p>
     </footer>
+
+    <script>
+        // Function to handle showing/hiding loader
+        function triggerLoader() {
+            const loader = document.getElementById('loader');
+            loader.classList.remove('fade-out');
+            setTimeout(() => {
+                loader.classList.add('fade-out');
+            }, 600); // Shows loader for 0.6 seconds
+        }
+
+        // Initial page load
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.classList.add('fade-out');
+            }, 800); // Slightly longer for the first load
+        });
+
+        // Trigger loader when clicking navigation links to simulate "page changes"
+        document.querySelectorAll('nav a, .btn').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Only trigger if it's an internal link
+                if(link.getAttribute('href').startsWith('#')) {
+                    triggerLoader();
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
